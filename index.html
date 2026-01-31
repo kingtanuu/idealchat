@@ -1,146 +1,89 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>会話フロー作成ツール（仮想チャット画面）</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="app">
-    <aside id="sidebar">
-      <div class="sidebar-header">
-        <button id="new-scenario-button" class="new-chat-btn" type="button">
-          <span class="icon">+</span>
-          <span>新規チャット</span>
-        </button>
-        <button id="import-scenario-button" class="import-btn" type="button">
-          <i data-lucide="download" class="icon"></i>
-          <span>Import</span>
-        </button>
-      </div>
-      <div class="sidebar-body">
-        <div class="sidebar-section">
-          <div class="section-title">保存済みシナリオ</div>
-          <div id="sidebar-scenario-list" class="sidebar-list"></div>
-        </div>
-      </div>
-    </aside>
-    <div id="sidebar-overlay"></div>
-    <div id="main-container">
-      <header id="app-header">
-        <button id="toggle-sidebar-button" class="icon-btn" type="button" aria-label="サイドバー切り替え">
-          <span class="icon">☰</span>
-        </button>
-        <div class="scenario-name-area">
-          <span id="scenario-name-display" class="scenario-name">未設定</span>
-          <button id="rename-header-button" class="icon-btn" type="button" aria-label="名前を変更" style="margin-left: 8px;">
-            <i data-lucide="pencil" style="width: 14px; height: 14px;"></i>
-          </button>
-        </div>
-        <button id="screenshot-button" class="icon-btn" type="button" aria-label="スクリーンショット">
-          <i data-lucide="camera" class="icon"></i>
-        </button>
-        <button id="settings-button" class="icon-btn" type="button" aria-label="設定">
-          <i data-lucide="settings" class="icon"></i>
-        </button>
-      </header>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
 
-    <main id="layout">
-      <section id="chat-column" aria-label="チャットメッセージ">
-        <div class="message-list" id="message-list">
-          <div class="message message-aiA">
-            <div class="meta">AI-A</div>
-            <div class="body">ここに AI-A のメッセージが入ります。</div>
-          </div>
-          <div class="message message-user">
-            <div class="meta">User</div>
-            <div class="body">ここにユーザーのメッセージが入ります。</div>
-          </div>
-          <div class="message message-aiB">
-            <div class="meta">AI-B</div>
-            <div class="body">ここに AI-B のメッセージが入ります。</div>
-          </div>
-        </div>
-      </section>
-    </main>
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/12.8.0/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/12.8.0/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/12.8.0/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
 
-    <section id="composer" aria-label="メッセージ入力エリア">
-      <div id="role-selector" class="control-group" aria-label="送信者選択">
-        <label class="control-label">送信者</label>
-        <div class="role-options">
-          <label class="option"><input type="radio" name="role" value="aiA" checked> AI-A</label>
-          <label class="option"><input type="radio" name="role" value="aiB"> AI-B</label>
-          <label class="option"><input type="radio" name="role" value="user"> ユーザー</label>
-        </div>
-      </div>
-      <div class="control-group input-group">
-        <label class="control-label" for="message-input">メッセージ</label>
-        <textarea id="message-input" rows="3" placeholder="メッセージを入力..."></textarea>
-      </div>
-      <div class="control-group action-group">
-        <button id="send-button" type="button">送信</button>
-      </div>
-    </section>
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">
+      <h2>Welcome</h2>
+      <h1>Firebase Hosting Setup Complete</h1>
+      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
+      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div>
-  </div>
+    <p id="load">Firebase SDK Loading&hellip;</p>
 
-  <div id="scenario-list-modal" class="modal hidden" aria-hidden="true">
-    <div class="modal-content">
-      <header class="modal-header">
-        <h2>会話フロー一覧</h2>
-        <button class="ghost-btn close-modal" type="button" aria-label="閉じる">×</button>
-      </header>
-      <div class="modal-body" id="scenario-list-container">
-        <p>保存済みのシナリオがここに表示されます。</p>
-      </div>
-      <footer class="modal-footer">
-        <button class="ghost-btn close-modal" type="button">閉じる</button>
-      </footer>
-    </div>
-  </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
-  <div id="settings-modal" class="modal hidden" aria-hidden="true">
-    <div class="modal-content">
-      <header class="modal-header">
-        <h2>設定</h2>
-        <button class="ghost-btn close-settings-modal" type="button" aria-label="閉じる">×</button>
-      </header>
-      <div class="modal-body">
-        <div class="settings-section">
-          <h3 class="settings-section-title">送信者のタイトル設定</h3>
-          <div class="settings-group">
-            <label for="label-user" class="settings-label">ユーザー</label>
-            <input type="text" id="label-user" class="settings-input" value="User" placeholder="User">
-          </div>
-          <div class="settings-group">
-            <label for="label-aiA" class="settings-label">生成AI-A</label>
-            <input type="text" id="label-aiA" class="settings-input" value="AI-A" placeholder="AI-A">
-          </div>
-          <div class="settings-group">
-            <label for="label-aiB" class="settings-label">生成AI-B</label>
-            <input type="text" id="label-aiB" class="settings-input" value="AI-B" placeholder="AI-B">
-          </div>
-        </div>
-      </div>
-      <footer class="modal-footer">
-        <button class="ghost-btn close-settings-modal" type="button">閉じる</button>
-        <button id="save-settings-button" class="primary-btn" type="button">保存</button>
-      </footer>
-    </div>
-  </div>
-
-  <input id="import-file-input" type="file" accept="application/json" hidden>
-  <div id="status-toast" class="toast hidden" role="status" aria-live="polite"></div>
-
-  <script src="script.js"></script>
-  <script>
-    lucide.createIcons();
-  </script>
-</body>
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth', 
+            'database', 
+            'firestore',
+            'functions',
+            'messaging', 
+            'storage', 
+            'analytics', 
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  </body>
 </html>
